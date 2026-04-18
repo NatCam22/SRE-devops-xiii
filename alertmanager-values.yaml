@@ -1,0 +1,32 @@
+alertmanager:
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['job']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: 'null'
+      routes:
+        - match:
+            alertname: Watchdog
+          receiver: 'null'
+        - match:
+            severity: critical
+          receiver: 'slack'
+    inhibit_rules:
+      - target_match_re:
+          alertname: '.+Overcommit'
+        source_match:
+          alertname: 'Watchdog'
+        equal: ['prometheus']
+    receivers:
+      - name: 'null'
+      - name: 'slack'
+        slack_configs:
+          - api_url: 'WEBHOOK' #Profe, yo puse mi url aquí (evidencia en ss) pero pues si lo quieres probar no te sirve dado que no tienes acceso a mi ruta y el webhook contiene secrets por lo cual no lo subo.
+            send_resolved: true
+            channel: '#alertas-app'
+            title: '{{ template "slack.default.title" . }}'
+            text: '{{ template "slack.default.text" . }}'

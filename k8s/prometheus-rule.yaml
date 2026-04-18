@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: sre-fastapi-rules
+  labels:
+    release: my-kube-prometheus-stack
+spec:
+  groups:
+    - name: sre-fastapi
+      rules:
+        - alert: HighCpuUsage
+          expr: |
+            rate(container_cpu_usage_seconds_total{pod=~"sre-fastapi.*", cpu="total"}[1m])
+            / on(pod) group_left()
+            kube_pod_container_resource_limits{container="sre-fastapi", resource="cpu"}
+            > 0.8
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High CPU usage in sre-fastapi"
+            description: "Container sre-fastapi is using more than 80% of its CPU limit"

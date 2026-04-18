@@ -21,11 +21,11 @@ resources:
 livenessProbe:
   path: /health
   port: 8081
-  initialDelaySeconds: 10
+  initialDelaySeconds: 30
   periodSeconds: 5
 
 readinessProbe:
   path: /health
   port: 8081
-  initialDelaySeconds: 5
+  initialDelaySeconds: 15
   periodSeconds: 5
