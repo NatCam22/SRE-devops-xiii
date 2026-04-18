@@ -3,15 +3,12 @@ PYTHON 	= $(VENV)/bin/python3
 PIP		= $(VENV)/bin/pip
 
 # Variables used to configure docker images
-IMAGE_REGISTRY_DOCKERHUB 	?= xoanmallon
 IMAGE_REGISTRY_GHCR			?= ghcr.io
-IMAGE_REPO					= keepcodingclouddevops11
-IMAGE_NAME					?= kc-11-liberando-productos-practica-final
+IMAGE_REPO					= natcam22
+IMAGE_NAME					?= sre-practica-devops-xiii
 VERSION						?= develop
 
 # Variables used to configure docker images registries to build and push
-IMAGE 				= $(IMAGE_REGISTRY_DOCKERHUB)/$(IMAGE_NAME):$(VERSION)
-IMAGE_LATEST 		= $(IMAGE_REGISTRY_DOCKERHUB)/$(IMAGE_NAME):latest
 IMAGE_GHCR			= $(IMAGE_REGISTRY_GHCR)/$(IMAGE_REPO)/$(IMAGE_NAME):$(VERSION)
 IMAGE_GHRC_LATEST	= $(IMAGE_REGISTRY_GHCR)/$(IMAGE_REPO)/$(IMAGE_NAME):latest
 
@@ -38,7 +35,5 @@ docker-build: ## Build image
 
 .PHONY: publish
 publish: docker-build ## Publish image
-	docker push $(IMAGE)
-	docker push $(IMAGE_LATEST)
 	docker push $(IMAGE_GHCR)
 	docker push $(IMAGE_GHRC_LATEST)
